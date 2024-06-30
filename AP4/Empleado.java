@@ -1,4 +1,6 @@
+package AP4;
 import java.util.Date;
+import java.util.List;
 
 public class Empleado extends Usuario {
     private NodoMeta cabeza;
@@ -6,8 +8,8 @@ public class Empleado extends Usuario {
     private int calificacion;
 
     // Constructor
-    public Empleado(int id, String nombre, String email, String clave) {
-        super(id, nombre, email, clave);
+    public Empleado(String nombre, String email, String clave) {
+        super(nombre, email, clave);
         this.cabeza = null;
         this.numeroDeMetas = 0;
         this.calificacion = 0;
@@ -38,18 +40,19 @@ public class Empleado extends Usuario {
             actual.siguiente = nuevoNodo;
         }
         numeroDeMetas++;
+
+        // Convertir java.util.Date a java.sql.Date
+        java.sql.Date sqlFechaInicio = new java.sql.Date(fechaInicio.getTime());
+        java.sql.Date sqlFechaFinEsperado = new java.sql.Date(fechaFinEsperado.getTime());
+
+        // Llamar al método insertarMeta de ConexionBaseDeDatos
+        ConexionBaseDeDatos.insertarMeta(id, nombreMeta, descripcion, sqlFechaInicio, sqlFechaFinEsperado, progreso, estado, this.getId());
     }
 
     // Método para obtener la lista de metas como un arreglo
     public Meta[] obtenerMetas() {
-        Meta[] metas = new Meta[numeroDeMetas];
-        NodoMeta actual = cabeza;
-        int indice = 0;
-        while (actual != null) {
-            metas[indice++] = actual.meta;
-            actual = actual.siguiente;
-        }
-        return metas;
+        List<Meta> metas = ConexionBaseDeDatos.obtenerMetasPorEmpleado(this.getId());
+        return metas.toArray(new Meta[0]);
     }
 
     // Método para ordenar metas alfabéticamente usando burbuja con nodos
@@ -99,6 +102,12 @@ public class Empleado extends Usuario {
                 actual.meta.setFechaInicio(fechaInicio);
                 actual.meta.setFechaFinEsperado(fechaFinEsperado);
                 actual.meta.setProgreso(progreso);
+
+                // Convertir java.util.Date a java.sql.Date
+                java.sql.Date sqlFechaInicio = new java.sql.Date(fechaInicio.getTime());
+                java.sql.Date sqlFechaFinEsperado = new java.sql.Date(fechaFinEsperado.getTime());
+                
+                ConexionBaseDeDatos.modificarMeta(id, nombreMeta, descripcion, sqlFechaInicio, sqlFechaFinEsperado, progreso, false);
                 break;
             }
             actual = actual.siguiente;
@@ -112,6 +121,9 @@ public class Empleado extends Usuario {
             if (actual.meta.getId() == id) {
                 actual.meta.setEstado(true);
                 actual.meta.setProgreso(100);
+
+                // Llamar al método marcarMetaFinalizada de ConexionBaseDeDatos
+                ConexionBaseDeDatos.marcarMetaFinalizada(id);
                 break;
             }
             actual = actual.siguiente;

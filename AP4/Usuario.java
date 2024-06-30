@@ -1,11 +1,13 @@
+package AP4;
+
 public class Usuario {
-    private int id;
+    private int id = (int) (Math.random() * 9000) + 1000;;
     private String nombre;
     private String email;
     private String clave;
 
     // Constructor
-    public Usuario(int id, String nombre, String email, String clave) {
+    public Usuario(String nombre, String email, String clave) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -43,10 +45,5 @@ public class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
-    }
-
-    // Método iniciar sesión
-    public boolean iniciarSesion(String email, String clave) {
-        return this.email.equals(email) && this.clave.equals(clave);
     }
 }

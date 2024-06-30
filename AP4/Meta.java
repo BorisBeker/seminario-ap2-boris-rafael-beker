@@ -1,3 +1,5 @@
+package AP4;
+
 import java.util.Date;
 
 public class Meta {
@@ -7,8 +9,8 @@ public class Meta {
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFinEsperado;
-    private boolean estado;
-    private int progreso;
+    private boolean estado; // true para completada, false para no completada
+    private int progreso; // 0 a 100
 
     // Constructor
     public Meta(int id, String nombreMeta, String nombreEmpleado, String descripcion, Date fechaInicio, Date fechaFinEsperado, boolean estado, int progreso) {
@@ -20,6 +22,10 @@ public class Meta {
         this.fechaFinEsperado = fechaFinEsperado;
         this.estado = estado;
         this.progreso = progreso;
+    }
+
+    Meta(int id, String titulo, String descripcion, Date fechaInicio, Date fechaFin, boolean estado, int idEmpleado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     // Getters y Setters
